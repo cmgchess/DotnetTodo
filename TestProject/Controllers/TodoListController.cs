@@ -70,7 +70,7 @@ namespace TestProject.Controllers
 
         [HttpPatch]
         [Route("todos/activate/{id}")]
-        public IActionResult Acticate(int id)
+        public IActionResult Activate(int id)
         {
             var todoToActivate = _todoList.Find(todo => todo.Id == id);
             if (todoToActivate == null)
