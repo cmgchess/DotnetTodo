@@ -22,14 +22,14 @@ namespace TestProject.Controllers
 
         [HttpGet]
         [Route("todos")]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             return Ok(_todoList.ToList());
         }
 
         [HttpGet]
         [Route("todos/{id}")]
-        public IActionResult Get(int id)
+        public IActionResult GetById(int id)
         {
             var todo = _todoList.Find(todo => todo.Id == id);
 
@@ -43,7 +43,7 @@ namespace TestProject.Controllers
 
         [HttpPost]
         [Route("todos")]
-        public IActionResult Post([FromBody] Todo todo)
+        public IActionResult Create([FromBody] Todo todo)
         {
             var todoExists = _todoList.Exists(t => t.Id == todo.Id);
             if (todoExists)
@@ -69,8 +69,26 @@ namespace TestProject.Controllers
         }
 
         [HttpPatch]
-        [Route("todos/{state}/{id}")]
-        public IActionResult Patch(string state, int id)
+        [Route("todos/activate/{id}")]
+        public IActionResult Acticate(int id)
+        {
+            var todoToActivate = _todoList.Find(todo => todo.Id == id);
+            if (todoToActivate == null)
+            {
+                return NotFound("Todo not found");
+            }
+
+            if (todoToActivate.Active)
+            {
+                return BadRequest("Todo already active");
+            }
+            todoToActivate.Active = true;
+            return Ok(todoToActivate);
+        }
+
+        [HttpPatch]
+        [Route("todos/deactivate/{id}")]
+        public IActionResult Deactivate(int id)
         {
             var todoToActivate = _todoList.Find(todo => todo.Id == id);
             if (todoToActivate == null)
@@ -79,36 +97,22 @@ namespace TestProject.Controllers
             }
 
 
-            if (state == "activate")
+            if (!todoToActivate.Active)
             {
-                if (todoToActivate.Active)
-                {
-                    return BadRequest("Todo already active");
-                }
-                todoToActivate.Active = true;
-                return Ok(todoToActivate);
+                return BadRequest("Todo already inactive");
             }
-
-            if (state == "deactivate")
-            {
-                if (!todoToActivate.Active)
-                {
-                    return BadRequest("Todo already inactive");
-                }
-                todoToActivate.Active = false;
-                return Ok(todoToActivate);
-            }
-
-            return BadRequest("Invalid action");
+            todoToActivate.Active = false;
+            return Ok(todoToActivate);
         }
 
         [HttpPut]
         [Route("todos/{id}")]
-        public IActionResult Put(int id, [FromBody] TodoUpdate todo)
+        public IActionResult Update(int id, [FromBody] TodoUpdate todo)
         {
             var todoToUpdate = _todoList.Find(todo => todo.Id == id);
 
-            if (todoToUpdate == null) {
+            if (todoToUpdate == null)
+            {
                 return NotFound("Todo not found");
             }
 
