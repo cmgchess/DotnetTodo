@@ -4,7 +4,7 @@ namespace TestProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoListController : ControllerBase
+    public class TodosController : ControllerBase
     {
         private static readonly List<Todo> _todoList = new List<Todo>
         {
@@ -13,25 +13,24 @@ namespace TestProject.Controllers
             new Todo { Id = 3, Description = "Shopping", Active = false },
         };
 
-        private readonly ILogger<TodoListController> _logger;
+        private readonly ILogger<TodosController> _logger;
 
-        public TodoListController(ILogger<TodoListController> logger)
+        public TodosController(ILogger<TodosController> logger)
         {
             _logger = logger;
         }
 
         [HttpGet]
-        [Route("todos")]
         public IActionResult GetAll()
         {
             return Ok(_todoList.ToList());
         }
 
         [HttpGet]
-        [Route("todos/{id}")]
+        [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            var todo = _todoList.Find(todo => todo.Id == id);
+            var todo = _todoList.FirstOrDefault(todo => todo.Id == id);
 
             if (todo == null)
             {
@@ -42,7 +41,6 @@ namespace TestProject.Controllers
         }
 
         [HttpPost]
-        [Route("todos")]
         public IActionResult Create([FromBody] Todo todo)
         {
             var todoExists = _todoList.Exists(t => t.Id == todo.Id);
@@ -56,10 +54,10 @@ namespace TestProject.Controllers
         }
 
         [HttpDelete]
-        [Route("todos/{id}")]
+        [Route("{id}")]
         public IActionResult Delete(int id)
         {
-            var todoToRemove = _todoList.Find(todo => todo.Id == id);
+            var todoToRemove = _todoList.FirstOrDefault(todo => todo.Id == id);
             if (todoToRemove == null)
             {
                 return NotFound("Todo not found");
@@ -69,10 +67,10 @@ namespace TestProject.Controllers
         }
 
         [HttpPatch]
-        [Route("todos/activate/{id}")]
+        [Route("{id}/activate")]
         public IActionResult Activate(int id)
         {
-            var todoToActivate = _todoList.Find(todo => todo.Id == id);
+            var todoToActivate = _todoList.FirstOrDefault(todo => todo.Id == id);
             if (todoToActivate == null)
             {
                 return NotFound("Todo not found");
@@ -87,10 +85,10 @@ namespace TestProject.Controllers
         }
 
         [HttpPatch]
-        [Route("todos/deactivate/{id}")]
+        [Route("{id}/deactivate")]
         public IActionResult Deactivate(int id)
         {
-            var todoToActivate = _todoList.Find(todo => todo.Id == id);
+            var todoToActivate = _todoList.FirstOrDefault(todo => todo.Id == id);
             if (todoToActivate == null)
             {
                 return NotFound("Todo not found");
@@ -106,10 +104,9 @@ namespace TestProject.Controllers
         }
 
         [HttpPut]
-        [Route("todos/{id}")]
-        public IActionResult Update(int id, [FromBody] TodoUpdate todo)
+        public IActionResult Update([FromBody] Todo todo)
         {
-            var todoToUpdate = _todoList.Find(todo => todo.Id == id);
+            var todoToUpdate = _todoList.FirstOrDefault(t => t.Id == todo.Id);
 
             if (todoToUpdate == null)
             {
