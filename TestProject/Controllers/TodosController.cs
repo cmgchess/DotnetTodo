@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TestProject.Interface;
+using TestProject.Interfaces;
 using TestProject.Models;
 
 namespace TestProject.Controllers

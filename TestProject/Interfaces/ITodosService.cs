@@ -1,6 +1,6 @@
 ﻿using TestProject.Models;
 
-namespace TestProject.Interface
+namespace TestProject.Interfaces
 {
     public interface ITodosService
     {

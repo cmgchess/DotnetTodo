@@ -1,4 +1,4 @@
-﻿using TestProject.Interface;
+﻿using TestProject.Interfaces;
 using TestProject.Models;
 
 namespace TestProject.Services
