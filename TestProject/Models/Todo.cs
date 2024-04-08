@@ -1,4 +1,4 @@
-namespace TestProject
+namespace TestProject.Models
 {
     public class Todo
     {

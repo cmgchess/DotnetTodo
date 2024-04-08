@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using TestProject.Interface;
+using TestProject.Models;
 
 namespace TestProject.Controllers
 {
@@ -6,31 +8,25 @@ namespace TestProject.Controllers
     [ApiController]
     public class TodosController : ControllerBase
     {
-        private static readonly List<Todo> _todoList = new List<Todo>
-        {
-            new Todo { Id = 1, Description = "Wake up", Active = true },
-            new Todo { Id = 2, Description = "Breakfast", Active = false },
-            new Todo { Id = 3, Description = "Shopping", Active = false },
-        };
+        private readonly ITodosService _todosService;
 
-        private readonly ILogger<TodosController> _logger;
-
-        public TodosController(ILogger<TodosController> logger)
+        public TodosController(ITodosService todosService)
         {
-            _logger = logger;
+            _todosService = todosService;
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_todoList.ToList());
+            var todos = await _todosService.GetAll();
+            return Ok(todos);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var todo = _todoList.FirstOrDefault(todo => todo.Id == id);
+            var todo = await _todosService.GetById(id);
 
             if (todo == null)
             {
@@ -41,80 +37,63 @@ namespace TestProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Todo todo)
+        public async Task<IActionResult> Create([FromBody] Todo todo)
         {
-            var todoExists = _todoList.Exists(t => t.Id == todo.Id);
-            if (todoExists)
+            var newTodoList = await _todosService.Create(todo);
+            if (newTodoList == null)
             {
                 return BadRequest("Cannot add Todo with same ID");
             }
-
-            _todoList.Add(todo);
-            return Ok(_todoList);
+            return Ok(newTodoList);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var todoToRemove = _todoList.FirstOrDefault(todo => todo.Id == id);
+            var todoToRemove = await _todosService.Delete(id);
             if (todoToRemove == null)
             {
                 return NotFound("Todo not found");
             }
-            _todoList.Remove(todoToRemove);
-            return Ok(_todoList);
+            return Ok(todoToRemove);
         }
 
         [HttpPatch]
         [Route("{id}/activate")]
-        public IActionResult Activate(int id)
+        public async Task<IActionResult> Activate(int id)
         {
-            var todoToActivate = _todoList.FirstOrDefault(todo => todo.Id == id);
+            var todoToActivate = await _todosService.Activate(id);
             if (todoToActivate == null)
             {
                 return NotFound("Todo not found");
             }
 
-            if (todoToActivate.Active)
-            {
-                return BadRequest("Todo already active");
-            }
-            todoToActivate.Active = true;
             return Ok(todoToActivate);
         }
 
         [HttpPatch]
         [Route("{id}/deactivate")]
-        public IActionResult Deactivate(int id)
+        public async Task<IActionResult> Deactivate(int id)
         {
-            var todoToActivate = _todoList.FirstOrDefault(todo => todo.Id == id);
-            if (todoToActivate == null)
+            var todoToDeactivate = await _todosService.Deactivate(id);
+            if (todoToDeactivate == null)
             {
                 return NotFound("Todo not found");
             }
 
-
-            if (!todoToActivate.Active)
-            {
-                return BadRequest("Todo already inactive");
-            }
-            todoToActivate.Active = false;
-            return Ok(todoToActivate);
+            return Ok(todoToDeactivate);
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] Todo todo)
+        public async Task<IActionResult> Update([FromBody] Todo todo)
         {
-            var todoToUpdate = _todoList.FirstOrDefault(t => t.Id == todo.Id);
+            var todoToUpdate = await _todosService.Update(todo);
 
             if (todoToUpdate == null)
             {
                 return NotFound("Todo not found");
             }
-
-            todoToUpdate.Description = todo.Description;
-            todoToUpdate.Active = todo.Active;
 
             return Ok(todoToUpdate);
         }
