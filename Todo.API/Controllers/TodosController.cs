@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using TestProject.Interfaces;
-using TestProject.Models;
+using Model = Todo.Interface.DataModels;
+using Todo.Interface.Services;
 
-namespace TestProject.Controllers
+namespace Todo.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -37,7 +37,7 @@ namespace TestProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Todo todo)
+        public async Task<IActionResult> Create([FromBody] Model.Todo todo)
         {
             var newTodoList = await _todosService.Create(todo);
             if (newTodoList == null)
@@ -86,7 +86,7 @@ namespace TestProject.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Todo todo)
+        public async Task<IActionResult> Update([FromBody] Model.Todo todo)
         {
             var todoToUpdate = await _todosService.Update(todo);
 

@@ -1,4 +1,4 @@
-namespace TestProject.Models
+namespace Todo.Interface.DataModels
 {
     public class Todo
     {

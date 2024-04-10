@@ -1,9 +1,9 @@
-using TestProject.Interfaces;
-using TestProject.Services;
+using Todo.Implementation.Services;
+using Todo.Interface.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container.b
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
