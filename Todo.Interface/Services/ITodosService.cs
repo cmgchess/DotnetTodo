@@ -6,8 +6,8 @@ namespace Todo.Interface.Services
     {
         Task<List<Model.Todo>> GetAll();
         Task<Model.Todo?> GetById(int id);
-        Task<List<Model.Todo>?> Create(Model.Todo todo);
-        Task<List<Model.Todo>?> Delete(int id);
+        Task<Model.Todo?> Create(Model.Todo todo);
+        Task<Model.Todo?> Delete(int id);
         Task<Model.Todo?> Activate(int id);
         Task<Model.Todo?> Deactivate(int id);
         Task<Model.Todo?> Update(Model.Todo todo);

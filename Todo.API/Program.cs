@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Todo.Implementation.Data;
 using Todo.Implementation.Services;
 using Todo.Interface.Services;
 
@@ -10,7 +12,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<ITodosService, TodosService>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
+});
+
+builder.Services.AddScoped<ITodosService, TodosService>();
 
 var app = builder.Build();
 

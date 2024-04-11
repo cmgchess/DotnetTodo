@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Model = Todo.Interface.DataModels;
 using Todo.Interface.Services;
+using Model = Todo.Interface.DataModels;
 
 namespace Todo.API.Controllers
 {
