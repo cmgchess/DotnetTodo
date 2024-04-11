@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Todo.Implementation.Data;
+using Todo.Interface.Dtos;
 using Todo.Interface.Services;
 using Model = Todo.Interface.DataModels;
 
@@ -8,10 +10,12 @@ namespace Todo.Implementation.Services
     public class TodosService : ITodosService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public TodosService(ApplicationDbContext context)
+        public TodosService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<List<Model.Todo>> GetAll()
@@ -31,17 +35,12 @@ namespace Todo.Implementation.Services
             return todo;
         }
 
-        public async Task<Model.Todo?> Create(Model.Todo todo)
+        public async Task<Model.Todo?> Create(CreateTodoReqeustDto todo)
         {
-            var todoExists = await _context.Todos.AnyAsync(x => x.Id == todo.Id);
-            if (todoExists)
-            {
-                return null;
-            }
-
-            await _context.Todos.AddAsync(todo);
+            var todoToCreate = _mapper.Map<Model.Todo>(todo);
+            await _context.Todos.AddAsync(todoToCreate);
             await _context.SaveChangesAsync();
-            return todo;
+            return todoToCreate;
         }
 
         public async Task<Model.Todo?> Delete(int id)

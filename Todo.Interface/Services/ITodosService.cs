@@ -1,4 +1,5 @@
-﻿using Model = Todo.Interface.DataModels;
+﻿using Todo.Interface.Dtos;
+using Model = Todo.Interface.DataModels;
 
 namespace Todo.Interface.Services
 {
@@ -6,7 +7,7 @@ namespace Todo.Interface.Services
     {
         Task<List<Model.Todo>> GetAll();
         Task<Model.Todo?> GetById(int id);
-        Task<Model.Todo?> Create(Model.Todo todo);
+        Task<Model.Todo?> Create(CreateTodoReqeustDto todo);
         Task<Model.Todo?> Delete(int id);
         Task<Model.Todo?> Activate(int id);
         Task<Model.Todo?> Deactivate(int id);

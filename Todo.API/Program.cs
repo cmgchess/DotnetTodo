@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Todo.Implementation.Data;
+using Todo.Implementation.Mapping;
 using Todo.Implementation.Services;
 using Todo.Interface.Services;
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.b
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

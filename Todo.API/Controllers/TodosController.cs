@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Todo.Interface.Dtos;
 using Todo.Interface.Services;
 using Model = Todo.Interface.DataModels;
 
@@ -37,7 +38,7 @@ namespace Todo.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Model.Todo todo)
+        public async Task<IActionResult> Create([FromBody] CreateTodoReqeustDto todo)
         {
             var newTodoList = await _todosService.Create(todo);
             if (newTodoList == null)
