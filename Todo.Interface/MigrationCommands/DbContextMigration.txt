@@ -1,0 +1,1 @@
+dotnet ef dbcontext scaffold Name=ConnectionStrings:DatabaseConnection Microsoft.EntityFrameworkCore.SqlServer --context "ApplicationDbContext" --context-namespace "Todo.Implementation.Data" --context-dir "../Todo.Implementation/Data"  --namespace "Todo.Interface.DataModels" --output-dir "../Todo.Interface/DataModels"  --table Todos  -f

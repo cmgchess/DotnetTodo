@@ -1,6 +1,6 @@
-﻿using Model = Todo.Interface.DataModels;
+﻿using AutoMapper;
 using Todo.Interface.Dtos;
-using AutoMapper;
+using Model = Todo.Interface.DataModels;
 
 
 namespace Todo.Implementation.Mapping
